@@ -46,6 +46,8 @@ eda.ipynb (0 points)
 score_model.py (2 points)
 When this is called using python score_model.py in the command line, this will ingest the .pkl random forest file and apply the model to the locally saved scoring dataset csv. There must be data check steps and clear commenting for each step inside the .py file. The output for running this file is a csv file with the predicted score, as well as a png or text file output that contains the model accuracy report (e.g. sklearn's classification report or any other way of model evaluation).
 
+#####"TrainPredictions.csv" was the output for the predictors that has an index column and the predictor column.  In addition the PulledData.txt has the model accuracy report output.
+
 3. Critical Thinking (2 points total)
 Modify this ReadMe file to answer the following questions directly in place.
 	1) Kaggle changes links/ file locations/login process/ file content

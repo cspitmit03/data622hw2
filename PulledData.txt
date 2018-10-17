@@ -28,6 +28,8 @@ Embarked      0
 dtype: int64
 File CLF.PKL exists and is readable
  
+File TrainPredictions exists and is readable
+ 
 The following is the Score Model Results
              precision    recall  f1-score   support
 
