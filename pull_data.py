@@ -34,7 +34,9 @@ payload = {
     'rememberme': 'false'
 }
 
+
 loginURL = 'https://www.kaggle.com/account/login'
+
 dataURL = "https://www.kaggle.com/c/3136/download/train.csv"
 
 with requests.Session() as c:
@@ -50,8 +52,10 @@ with requests.Session() as c:
 
         for row in reader:
             writer.writerow(row)
-#    response = c.get(dataURL).content
-#    train = pd.read_csv(io.StringIO(response.decode('utf-8')))
+
+#the above data was obtained from stack overflow 
+#https://stackoverflow.com/questions/50863516/issue-in-extracting-titanic-training-data-from-kaggle-using-jupyter-notebook
+#and was modified to be able to save the data as a csv to be able to test to see if it exists
 
 
 dataURL = "https://www.kaggle.com/c/3136/download/test.csv"
@@ -70,16 +74,9 @@ with requests.Session() as c:
         for row in reader:
             writer.writerow(row)
 
-#with requests.Session() as c:
-#    response = c.get(loginURL).text
-#    AFToken = response[response.index('antiForgeryToken')+19:response.index('isAnonymous: ')-12]
-#    print("AntiForgeryToken={}".format(AFToken))
-#    payload['__RequestVerificationToken']=AFToken
-#    c.post(loginURL + "?isModal=true&returnUrl=/", data=payload)
-#    response = c.get(dataURL).content
-#    test = pd.read_csv(io.StringIO(response.decode('utf-8')))
-
-
+#the above data was obtained from stack overflow 
+#https://stackoverflow.com/questions/50863516/issue-in-extracting-titanic-training-data-from-kaggle-using-jupyter-notebook
+#and was modified to be able to save the data as a csv to be able to test to see if it exists
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -107,7 +104,6 @@ if os.path.isfile(PATH2) and os.access(PATH2, os.R_OK):
 else:
     logger.debug('Either the file TEST is missing or not readable')
 
-#
 train = pd.read_csv('train.csv', index_col = 0)
 test = pd.read_csv('test.csv', index_col = 0)
 

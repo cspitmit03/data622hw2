@@ -47,6 +47,23 @@ When this is called using python score_model.py in the command line, this will i
 3. Critical Thinking (2 points total)
 Modify this ReadMe file to answer the following questions directly in place.
 	1) Kaggle changes links/ file locations/login process/ file content
+
+For this HW assignment I did not modify any gaggle links or items.  Originally, I used the API call since i thought this HW2 was a local run assignment.  However, since we are dockerizing the HW we need to use the credentials method.
+
+
 	2) We run out of space on HD / local permissions issue - can't save files
+At times, when data is large to work or you can't save files locally it is best to use a docker container type solution.  However, this doesn't always solve the problem.  Even if you're able to create a docker container if the user that downloads this container doesn't have the space to run all the dependencies in memory and the data files then they won't be able to run the file.  Example, this docker container is almost 2GB of temporary data needed to run due to dependencies.  
+
+
 	3) Someone updated python packages and there is unintended effect (functions retired or act differently)
+
+This can be avoided by asserting in the requirements.txt that the version of an app is installed with the one used when building the docker container.  This avoids the issue of different users having different versions of dependencies that may break the code.  Example, isna() vs isnull() calls when checking missing data.
+
+
+
 	4) Docker issues - lost internet within docker due to some ip binding to vm or local routing issues( I guess this falls under lost internet, but I am talking more if docker is the cause rather then ISP)
+
+Having something internet dependent would mean there is an issue with the user itself.  If there are issues with IP binding to VM or local routing issues, at times you have to check if the ports are already being used for another application or if its being used by your machine for other tasks.  In reality once the docker container is downloaded there should be no dependencies to go back to the internet and should be self contained.
+
+Now if the app is a trading app (like going to get stocks within the python files, then it might be best to preload the data when dockerizing the app if you suspect people having issues with internet connectivity.  This means that there is a tradeoff between freshness of data vs reliability of the app.
+
