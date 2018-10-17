@@ -1,0 +1,38 @@
+File TRAIN exists and is readable
+File TEST exists and is readable
+Train data has the following anomalies
+Survived      0
+Pclass        0
+Name          0
+Sex           0
+Age         177
+SibSp         0
+Parch         0
+Ticket        0
+Fare          0
+Cabin       687
+Embarked      2
+dtype: int64
+
+Test data has the following anomalies
+Pclass        0
+Name          0
+Sex           0
+Age          86
+SibSp         0
+Parch         0
+Ticket        0
+Fare          1
+Cabin       327
+Embarked      0
+dtype: int64
+File CLF.PKL exists and is readable
+ 
+The following is the Score Model Results
+             precision    recall  f1-score   support
+
+          0       0.92      0.98      0.95       549
+          1       0.96      0.86      0.91       342
+
+avg / total       0.93      0.93      0.93       891
+

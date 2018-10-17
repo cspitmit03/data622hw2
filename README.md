@@ -35,6 +35,8 @@ When this is called using python pull_data.py in the command line, this will go 
 	Training dataset url: https://www.kaggle.com/c/titanic/download/train.csv
 	Scoring dataset url: https://www.kaggle.com/c/titanic/download/test.csv
 
+#####The data was saved as train.csv and test.csv.  From here the log text file is PulledData.txt which stores all the tests.
+
 train_model.py (5 points)
 When this is called using python train_model.py in the command line, this will take in the training dataset csv, perform the necessary data cleaning and imputation, and fit a classification model to the dependent Y. There must be data check steps and clear commenting for each step inside the .py file. The output for running this file is the random forest model saved as a .pkl file in the local directory. Remember that the thought process and decision for why you chose the final model must be clearly documented in this section.
 eda.ipynb (0 points)
@@ -66,4 +68,3 @@ This can be avoided by asserting in the requirements.txt that the version of an 
 Having something internet dependent would mean there is an issue with the user itself.  If there are issues with IP binding to VM or local routing issues, at times you have to check if the ports are already being used for another application or if its being used by your machine for other tasks.  In reality once the docker container is downloaded there should be no dependencies to go back to the internet and should be self contained.
 
 Now if the app is a trading app (like going to get stocks within the python files, then it might be best to preload the data when dockerizing the app if you suspect people having issues with internet connectivity.  This means that there is a tradeoff between freshness of data vs reliability of the app.
-

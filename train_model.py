@@ -8,64 +8,66 @@ Created on Tue Oct  9 13:47:08 2018
 
 #define function to clean up data
 
-
-import pickle
-import requests
-import json
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report
-import pandas as pd
-import numpy as np
+#pull in the data from pull_data.py in order to get files needed and variables
 from pull_data import *
 
 
-def cleanup(mydata):
-    if {'Survived'}.issubset(mydata.columns):
-        mydata = mydata.drop(["Survived"], axis = 1)
+def cleanup(datacall):
 
-    mydata["Embarked"] = mydata["Embarked"].fillna(mydata.Embarked.mode())
+    # from the isnull check before, we noticed that age, fare, and embarked had missing data that needs to be imputedself.
+    #For embarked since it is a categorical data, the mode is being used to fill in the empty info
+    #For age and fare, since they are numerical, we can use the mean of subsets to fill in the missing data
+
     #find mode of embarked data to fill impute missing data.
+    if {'Survived'}.issubset(datacall.columns):
+        datacall = datacall.drop(["Survived"], axis = 1)
 
 
-    # If any ages are null, impute to the age average of the passenger's class and sex
-    for i in mydata.Age[mydata.Age.isnull()].index.values:
-            pclass = mydata['Pclass'].loc[i] # passenger class of ith null value
-            passengersex = mydata['Sex'].loc[i] # passenger class of ith null value
-            pclass_mean = np.mean(mydata[(mydata.Pclass == pclass) & (mydata.Sex == passengersex)].Age) # mean age of passenger class & sex
-            mydata.loc[i, "Age"] = pclass_mean
+    #The highest mode for embarked is S in both the test and train datasets
+    datacall["Embarked"] = datacall["Embarked"].fillna('S')
+
+
+    for i in datacall.Age[datacall.Age.isnull()].index.values:
+            pclass = datacall['Pclass'].loc[i] # passenger class of ith null value
+            passengersex = datacall['Sex'].loc[i] # passenger class of ith null value
+            pclass_mean = np.mean(datacall[(datacall.Pclass == pclass) & (datacall.Sex == passengersex)].Age) # mean age of passenger class & sex
+            datacall.loc[i, "Age"] = pclass_mean
 
     # If any fares are null, impute to the fare average of the passenger's class
-    # if sum(mydata.Fare.isnull()) > 0:
-    for i in mydata.Fare[mydata.Fare.isnull()].index.values:
-        pclass = mydata['Pclass'].loc[i] # passenger class of ith null value
-        pclass_mean = np.mean(mydata[mydata.Pclass == pclass].Fare) # mean fare of that passenger class
-        mydata.loc[i, "Fare"] = pclass_mean
+    # if sum(datacall.Fare.isnull()) > 0:
+    for i in datacall.Fare[datacall.Fare.isnull()].index.values:
+        pclass = datacall['Pclass'].loc[i] # passenger class of ith null value
+        pclass_mean = np.mean(datacall[datacall.Pclass == pclass].Fare) # mean fare of that passenger class
+        datacall.loc[i, "Fare"] = pclass_mean
 
-    # Create Dummy columns for points of Embarkation - S is the base case
-    embarked_dummies = pd.get_dummies(mydata["Embarked"])[["C", "Q"]]
+
+
+    # Create Dummy columns for points of Embarkation
+    # from the isna analysis and summary S is the most common value in Embarked column
+    embarked_dummies = pd.get_dummies(datacall["Embarked"])[["C", "Q"]]
     embarked_dummies = embarked_dummies.rename(columns = {"C":"Embark_C",
                        "Q": "Embark_Q"})
 
-    # Create mydata_X, the dataframe that will be returned
-    mydata_X = mydata.drop(["Name", "Ticket", "Cabin", "Embarked"], axis = 1)
+    # Create datacall_X, the dataframe that will be returned
+    datacall_X = datacall.drop(["Name", "Ticket", "Cabin", "Embarked"], axis = 1)
 
     # Add Embarked Dummies Columns to X
-    mydata_X = mydata_X.assign(**embarked_dummies)
+    datacall_X = datacall_X.assign(**embarked_dummies)
 
     # Convert Sex Column to dummy, isMale
-    mydata_X["isMale"] = mydata_X.Sex == "male"
-    mydata_X = mydata_X.drop(["Sex"], axis = 1)
+    datacall_X["isMale"] = datacall_X.Sex == "male"
+    datacall_X = datacall_X.drop(["Sex"], axis = 1)
 
     # No More Nulls left: X.isnull().sum() == 0 for all columns
 
-    return(mydata_X)
+    return(datacall_X)
 
 y = train["Survived"]
 X = cleanup(train)
 
 
 # Create Random Forest Classifier
-clf = RandomForestClassifier(n_estimators=100,
+clf = RandomForestClassifier(n_estimators=50,
                              max_depth=10,
                              random_state=0,
                              min_samples_split = 3)
@@ -73,10 +75,10 @@ clf = RandomForestClassifier(n_estimators=100,
 # Fit classifier to test data
 clf = clf.fit(X, y)
 
-# Save classifier to pickle file, clf.pkl
-pickle.dump( clf, open( "clf.pkl", "wb" ) )
+# Save classifier to pickle file, myclf.pkl
+pickle.dump( clf, open( "myclf.pkl", "wb" ) )
 
-PATH='./clf.pkl'
+PATH='./myclf.pkl'
 
 if os.path.isfile(PATH) and os.access(PATH, os.R_OK):
     logger.debug('File CLF.PKL exists and is readable')
